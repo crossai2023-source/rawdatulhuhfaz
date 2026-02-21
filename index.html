@@ -1057,1254 +1057,725 @@ SLIDER
 </html> --><!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Rawdatul Huffaz – Online Madrasah</title>
-  <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet" />
-
-  <style>
-    /* ══════════════════════════════════════
-       DESIGN TOKENS
-    ══════════════════════════════════════ */
-    :root {
-      --wine:       #6B1A2A;
-      --wine-dark:  #4A0F1C;
-      --wine-light: #8C2E42;
-      --cream:      #F7EFD8;
-      --cream-dark: #EAD9B4;
-      --cream-mid:  #F2E5C5;
-      --gold:       #C09040;
-      --gold-light: #E0BA70;
-      --text-dark:  #2A0A10;
-    }
-
-    /* ══════════════════════════════════════
-       RESET & BASE
-    ══════════════════════════════════════ */
-    *, *::before, *::after {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      font-family: 'Cormorant Garamond', Georgia, serif;
-      background: var(--cream);
-      color: var(--text-dark);
-      overflow-x: hidden;
-    }
-
-    /* ══════════════════════════════════════
-       NAVBAR
-    ══════════════════════════════════════ */
-    nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 1000;
-      background: rgba(74, 15, 28, 0.97);
-      backdrop-filter: blur(10px);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 5%;
-      height: 70px;
-      border-bottom: 2px solid var(--gold);
-    }
-
-    .nav-logo {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .nav-logo .logo-icon {
-      width: 42px;
-      height: 42px;
-      border: 2px solid var(--gold);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: 'Amiri', serif;
-      color: var(--gold);
-      font-size: 1.3rem;
-      flex-shrink: 0;
-    }
-
-    .nav-logo .logo-text {
-      font-family: 'Amiri', serif;
-      color: var(--cream);
-      font-size: 1.25rem;
-      white-space: nowrap;
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 2rem;
-      list-style: none;
-    }
-
-    .nav-links a {
-      color: var(--cream-dark);
-      text-decoration: none;
-      font-size: 1rem;
-      font-weight: 500;
-      position: relative;
-      transition: color 0.3s;
-    }
-
-    .nav-links a::after {
-      content: '';
-      position: absolute;
-      bottom: -4px;
-      left: 0;
-      width: 0;
-      height: 1px;
-      background: var(--gold);
-      transition: width 0.3s;
-    }
-
-    .nav-links a:hover { color: var(--gold-light); }
-    .nav-links a:hover::after { width: 100%; }
-
-    /* Hamburger */
-    .hamburger {
-      display: none;
-      flex-direction: column;
-      gap: 5px;
-      cursor: pointer;
-      padding: 4px;
-      background: none;
-      border: none;
-    }
-
-    .hamburger span {
-      display: block;
-      width: 26px;
-      height: 2px;
-      background: var(--cream);
-      border-radius: 2px;
-      transition: all 0.3s ease;
-    }
-
-    .hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
-    .hamburger.open span:nth-child(2) { opacity: 0; transform: translateX(-8px); }
-    .hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
-
-    /* ══════════════════════════════════════
-       SLIDER / HERO
-    ══════════════════════════════════════ */
-    .slider {
-      margin-top: 70px;
-      position: relative;
-      width: 100%;
-      height: 580px;
-      overflow: hidden;
-    }
-
-    .slide {
-      position: absolute;
-      inset: 0;
-      opacity: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: opacity 1s ease;
-    }
-
-    .slide.active { opacity: 1; }
-
-    .slide-bg {
-      position: absolute;
-      inset: 0;
-      background-size: cover;
-      background-position: center;
-      transform: scale(1.06);
-      transition: transform 6s ease;
-    }
-
-    .slide.active .slide-bg { transform: scale(1); }
-
-    .slide-overlay {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(
-        135deg,
-        rgba(74, 15, 28, 0.88) 0%,
-        rgba(107, 26, 42, 0.58) 60%,
-        rgba(0, 0, 0, 0.3) 100%
-      );
-    }
-
-    .slide-content {
-      position: relative;
-      z-index: 2;
-      text-align: center;
-      color: var(--cream);
-      padding: 0 24px;
-      max-width: 750px;
-      width: 100%;
-    }
-
-    .slide-content .arabic {
-      font-family: 'Amiri', serif;
-      font-size: 2.2rem;
-      color: var(--gold-light);
-      margin-bottom: 0.5rem;
-      opacity: 0;
-      transform: translateY(-20px);
-      transition: opacity 0.8s 0.3s, transform 0.8s 0.3s;
-    }
-
-    .slide-content h1 {
-      font-family: 'Amiri', serif;
-      font-size: 3.2rem;
-      font-weight: 700;
-      line-height: 1.15;
-      margin-bottom: 1rem;
-      opacity: 0;
-      transform: translateY(20px);
-      transition: opacity 0.8s 0.5s, transform 0.8s 0.5s;
-    }
-
-    .slide-content p {
-      font-size: 1.15rem;
-      font-style: italic;
-      color: var(--cream-dark);
-      opacity: 0;
-      transition: opacity 0.8s 0.7s;
-    }
-
-    .slide-content .slide-btn {
-      display: inline-block;
-      margin-top: 1.8rem;
-      padding: 12px 36px;
-      background: var(--gold);
-      color: var(--wine-dark);
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.05rem;
-      font-weight: 600;
-      letter-spacing: 1px;
-      text-decoration: none;
-      border: none;
-      cursor: pointer;
-      opacity: 0;
-      transition: opacity 0.8s 0.9s, background 0.3s;
-    }
-
-    .slide-content .slide-btn:hover { background: var(--gold-light); }
-
-    .slide.active .slide-content .arabic,
-    .slide.active .slide-content h1,
-    .slide.active .slide-content p,
-    .slide.active .slide-content .slide-btn {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    /* Arrows */
-    .slider-arrow {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      z-index: 10;
-      background: rgba(74, 15, 28, 0.6);
-      border: 1px solid var(--gold);
-      color: var(--gold);
-      width: 46px;
-      height: 46px;
-      border-radius: 50%;
-      font-size: 1.6rem;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: background 0.3s;
-    }
-
-    .slider-arrow:hover { background: var(--wine); }
-    .slider-arrow.prev { left: 20px; }
-    .slider-arrow.next { right: 20px; }
-
-    /* Dots */
-    .slider-dots {
-      position: absolute;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      gap: 10px;
-      z-index: 10;
-    }
-
-    .dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.4);
-      border: 1px solid var(--gold);
-      cursor: pointer;
-      transition: background 0.3s;
-    }
-
-    .dot.active { background: var(--gold); }
-
-    /* ══════════════════════════════════════
-       SHARED SECTION STYLES
-    ══════════════════════════════════════ */
-    section { padding: 80px 5%; }
-
-    .section-header {
-      text-align: center;
-      margin-bottom: 50px;
-    }
-
-    .section-header .arabic-title {
-      font-family: 'Amiri', serif;
-      font-size: 2rem;
-      color: var(--wine-light);
-      display: block;
-    }
-
-    .section-header h2 {
-      font-family: 'Amiri', serif;
-      font-size: 2.4rem;
-      color: var(--wine-dark);
-      margin: 4px 0 12px;
-    }
-
-    .section-header p {
-      font-size: 1.1rem;
-      color: #6A3040;
-      font-style: italic;
-      max-width: 600px;
-      margin: 0 auto;
-    }
-
-    .divider {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      justify-content: center;
-      margin: 12px 0 30px;
-    }
-
-    .divider::before,
-    .divider::after {
-      content: '';
-      flex: 1;
-      max-width: 120px;
-      height: 1px;
-      background: var(--gold);
-    }
-
-    .divider span {
-      color: var(--gold);
-      font-size: 1.2rem;
-    }
-
-    /* ══════════════════════════════════════
-       ABOUT SECTION
-    ══════════════════════════════════════ */
-    #about {
-      background: linear-gradient(135deg, var(--cream) 0%, var(--cream-mid) 100%);
-    }
-
-    .about-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 60px;
-      align-items: center;
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-
-    .about-text h3 {
-      font-family: 'Amiri', serif;
-      font-size: 1.8rem;
-      color: var(--wine);
-      margin-bottom: 16px;
-    }
-
-    .about-text p {
-      font-size: 1.1rem;
-      line-height: 1.9;
-      color: #4A2030;
-      margin-bottom: 16px;
-    }
-
-    .img-frame {
-      width: 100%;
-      aspect-ratio: 4 / 3;
-      background: linear-gradient(135deg, var(--wine-dark) 0%, var(--wine-light) 100%);
-      border: 3px solid var(--gold);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: 'Amiri', serif;
-      color: var(--cream);
-      font-size: 1.4rem;
-      text-align: center;
-      padding: 30px;
-      line-height: 2;
-      position: relative;
-    }
-
-    .img-frame::before {
-      content: '';
-      position: absolute;
-      inset: 10px;
-      border: 1px solid rgba(192, 144, 64, 0.4);
-      pointer-events: none;
-    }
-
-    /* Stats */
-    .stats-row {
-      display: flex;
-      gap: 16px;
-      margin-top: 30px;
-      flex-wrap: wrap;
-    }
-
-    .stat-item {
-      flex: 1;
-      min-width: 80px;
-      text-align: center;
-      background: var(--wine-dark);
-      color: var(--cream);
-      padding: 16px 10px;
-      border-bottom: 3px solid var(--gold);
-    }
-
-    .stat-item .num {
-      font-family: 'Amiri', serif;
-      font-size: 1.8rem;
-      color: var(--gold-light);
-      display: block;
-    }
-
-    .stat-item .label {
-      font-size: 0.82rem;
-      opacity: 0.8;
-    }
-
-    /* ══════════════════════════════════════
-       COURSES SECTION
-    ══════════════════════════════════════ */
-    #courses { background: var(--wine-dark); }
-
-    #courses .section-header h2,
-    #courses .section-header .arabic-title { color: var(--cream); }
-    #courses .section-header p { color: var(--cream-dark); }
-
-    .courses-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 24px;
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-
-    .course-card {
-      background: linear-gradient(160deg, rgba(107, 26, 42, 0.9), rgba(74, 15, 28, 0.95));
-      border: 1px solid rgba(192, 144, 64, 0.4);
-      padding: 32px 24px;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-      transition: transform 0.3s, border-color 0.3s;
-    }
-
-    .course-card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 3px;
-      background: linear-gradient(90deg, transparent, var(--gold), transparent);
-      transform: scaleX(0);
-      transition: transform 0.4s;
-    }
-
-    .course-card:hover { transform: translateY(-6px); border-color: var(--gold); }
-    .course-card:hover::before { transform: scaleX(1); }
-
-    .course-icon {
-      font-size: 2.4rem;
-      display: block;
-      margin-bottom: 14px;
-    }
-
-    .course-card h3 {
-      font-family: 'Amiri', serif;
-      font-size: 1.45rem;
-      color: var(--cream);
-      margin-bottom: 10px;
-    }
-
-    .course-card p {
-      font-size: 0.97rem;
-      color: rgba(247, 239, 216, 0.75);
-      line-height: 1.7;
-      font-style: italic;
-    }
-
-    /* ══════════════════════════════════════
-       TESTIMONIALS SECTION
-    ══════════════════════════════════════ */
-    #testimonials { background: var(--cream-mid); }
-
-    .testimonials-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 24px;
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-
-    .testi-card {
-      background: white;
-      border-left: 4px solid var(--wine);
-      padding: 28px;
-      box-shadow: 0 4px 20px rgba(107, 26, 42, 0.1);
-    }
-
-    .testi-card .quote {
-      font-family: 'Amiri', serif;
-      font-size: 3rem;
-      color: var(--gold);
-      line-height: 0.5;
-      margin-bottom: 12px;
-      display: block;
-    }
-
-    .testi-card p {
-      font-size: 1rem;
-      color: #4A2030;
-      line-height: 1.8;
-      font-style: italic;
-      margin-bottom: 14px;
-    }
-
-    .testi-card .testi-name {
-      font-weight: 600;
-      color: var(--wine);
-      font-size: 0.95rem;
-      font-style: normal;
-    }
-
-    /* ══════════════════════════════════════
-       CONTACT SECTION
-    ══════════════════════════════════════ */
-    #contact {
-      background: linear-gradient(135deg, var(--wine-dark) 0%, var(--wine) 100%);
-    }
-
-    #contact .section-header h2,
-    #contact .section-header .arabic-title { color: var(--cream); }
-    #contact .section-header p { color: var(--cream-dark); }
-
-    .contact-wrapper {
-      display: grid;
-      grid-template-columns: 1fr 1.4fr;
-      gap: 60px;
-      max-width: 1000px;
-      margin: 0 auto;
-      align-items: start;
-    }
-
-    .contact-info h3 {
-      font-family: 'Amiri', serif;
-      font-size: 1.6rem;
-      color: var(--gold-light);
-      margin-bottom: 20px;
-    }
-
-    .info-item {
-      display: flex;
-      gap: 14px;
-      margin-bottom: 22px;
-      align-items: flex-start;
-    }
-
-    .info-icon {
-      width: 38px;
-      height: 38px;
-      flex-shrink: 0;
-      background: rgba(192, 144, 64, 0.2);
-      border: 1px solid var(--gold);
-      color: var(--gold-light);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1rem;
-    }
-
-    .info-text {
-      color: var(--cream-dark);
-      font-size: 1rem;
-      line-height: 1.6;
-    }
-
-    .info-text strong {
-      display: block;
-      color: var(--cream);
-      font-weight: 600;
-      margin-bottom: 2px;
-    }
-
-    /* Contact Form */
-    .contact-form {
-      background: rgba(247, 239, 216, 0.07);
-      border: 1px solid rgba(192, 144, 64, 0.3);
-      padding: 36px;
-    }
-
-    .form-group { margin-bottom: 18px; }
-
-    .form-group label {
-      display: block;
-      color: var(--gold-light);
-      font-size: 0.92rem;
-      margin-bottom: 7px;
-      letter-spacing: 0.3px;
-    }
-
-    .form-group input,
-    .form-group select,
-    .form-group textarea {
-      width: 100%;
-      padding: 11px 14px;
-      background: rgba(247, 239, 216, 0.1);
-      border: 1px solid rgba(192, 144, 64, 0.35);
-      color: var(--cream);
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1rem;
-      outline: none;
-      transition: border-color 0.3s, background 0.3s;
-    }
-
-    .form-group input::placeholder,
-    .form-group textarea::placeholder {
-      color: rgba(247, 239, 216, 0.4);
-      font-style: italic;
-    }
-
-    .form-group input:focus,
-    .form-group select:focus,
-    .form-group textarea:focus {
-      border-color: var(--gold);
-      background: rgba(247, 239, 216, 0.15);
-    }
-
-    .form-group select option { background: var(--wine-dark); color: var(--cream); }
-    .form-group textarea { resize: vertical; min-height: 120px; }
-
-    .form-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-    }
-
-    .btn-submit {
-      width: 100%;
-      padding: 14px;
-      background: var(--gold);
-      color: var(--wine-dark);
-      font-family: 'Amiri', serif;
-      font-size: 1.1rem;
-      font-weight: 700;
-      border: none;
-      cursor: pointer;
-      letter-spacing: 1px;
-      margin-top: 6px;
-      transition: background 0.3s, transform 0.2s;
-    }
-
-    .btn-submit:hover { background: var(--gold-light); transform: translateY(-2px); }
-    .btn-submit:active { transform: translateY(0); }
-
-    #form-msg {
-      margin-top: 14px;
-      padding: 12px;
-      font-size: 0.95rem;
-      text-align: center;
-      font-style: italic;
-      display: none;
-    }
-
-    #form-msg.success {
-      display: block;
-      background: rgba(40, 120, 40, 0.25);
-      color: #90EE90;
-      border: 1px solid #90EE90;
-    }
-
-    #form-msg.error {
-      display: block;
-      background: rgba(200, 40, 40, 0.2);
-      color: #FFB0B0;
-      border: 1px solid #FFB0B0;
-    }
-
-    /* ══════════════════════════════════════
-       FOOTER
-    ══════════════════════════════════════ */
-    footer {
-      background: var(--wine-dark);
-      border-top: 2px solid var(--gold);
-      text-align: center;
-      padding: 40px 5%;
-      color: var(--cream-dark);
-    }
-
-    .footer-logo {
-      font-family: 'Amiri', serif;
-      font-size: 1.8rem;
-      color: var(--gold-light);
-      margin-bottom: 8px;
-    }
-
-    .footer-verse {
-      font-family: 'Amiri', serif;
-      font-size: 1.1rem;
-      color: var(--gold-light);
-      margin: 8px 0 16px;
-    }
-
-    .footer-links {
-      display: flex;
-      gap: 20px;
-      justify-content: center;
-      flex-wrap: wrap;
-      margin-bottom: 16px;
-    }
-
-    .footer-links a {
-      color: var(--cream-dark);
-      text-decoration: none;
-      font-size: 0.95rem;
-      opacity: 0.75;
-      transition: opacity 0.3s, color 0.3s;
-    }
-
-    .footer-links a:hover { opacity: 1; color: var(--gold-light); }
-
-    .footer-copy {
-      font-size: 0.88rem;
-      opacity: 0.6;
-      font-style: italic;
-    }
-
-    /* ══════════════════════════════════════
-       SCROLL FADE IN
-    ══════════════════════════════════════ */
-    .fade-in {
-      opacity: 0;
-      transform: translateY(28px);
-      transition: opacity 0.7s ease, transform 0.7s ease;
-    }
-
-    .fade-in.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    /* ══════════════════════════════════════
-       RESPONSIVE — TABLET  (max 960px)
-    ══════════════════════════════════════ */
-    @media (max-width: 960px) {
-      .courses-grid      { grid-template-columns: repeat(2, 1fr); gap: 18px; }
-      .testimonials-grid { grid-template-columns: repeat(2, 1fr); gap: 18px; }
-      .about-grid        { grid-template-columns: 1fr; gap: 36px; }
-      .contact-wrapper   { grid-template-columns: 1fr; gap: 36px; }
-      .slide-content h1  { font-size: 2.6rem; }
-    }
-
-    /* ══════════════════════════════════════
-       RESPONSIVE — MOBILE  (max 768px)
-    ══════════════════════════════════════ */
-    @media (max-width: 768px) {
-
-      /* Navbar */
-      nav {
-        padding: 0 4%;
-        height: 64px;
-      }
-
-      .nav-logo .logo-icon {
-        width: 36px;
-        height: 36px;
-        font-size: 1.1rem;
-      }
-
-      .nav-logo .logo-text { font-size: 1rem; }
-
-      .nav-links {
-        display: none;
-        flex-direction: column;
-        position: fixed;
-        top: 64px;
-        left: 0;
-        right: 0;
-        background: rgba(74, 15, 28, 0.99);
-        padding: 16px 6% 28px;
-        gap: 0;
-        border-top: 1px solid rgba(192, 144, 64, 0.3);
-        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
-        z-index: 998;
-      }
-
-      .nav-links.open { display: flex; }
-
-      .nav-links li {
-        border-bottom: 1px solid rgba(192, 144, 64, 0.15);
-      }
-
-      .nav-links a {
-        display: block;
-        padding: 15px 0;
-        font-size: 1.1rem;
-        color: var(--cream);
-      }
-
-      .nav-links a::after { display: none; }
-
-      .hamburger { display: flex; }
-
-      /* Slider */
-      .slider {
-        margin-top: 64px;
-        height: 380px;
-      }
-
-      .slide-content { padding: 0 18px; }
-      .slide-content .arabic { font-size: 1.6rem; }
-      .slide-content h1 { font-size: 1.8rem; line-height: 1.2; margin-bottom: 0.7rem; }
-      .slide-content p  { font-size: 0.97rem; }
-
-      .slide-content .slide-btn {
-        margin-top: 1.2rem;
-        padding: 10px 26px;
-        font-size: 0.92rem;
-      }
-
-      .slider-arrow {
-        width: 38px;
-        height: 38px;
-        font-size: 1.3rem;
-      }
-
-      .slider-arrow.prev { left: 10px; }
-      .slider-arrow.next { right: 10px; }
-
-      /* Sections */
-      section { padding: 55px 5%; }
-
-      .section-header { margin-bottom: 34px; }
-      .section-header .arabic-title { font-size: 1.6rem; }
-      .section-header h2 { font-size: 1.9rem; }
-      .section-header p  { font-size: 1rem; }
-
-      /* About */
-      .about-grid  { grid-template-columns: 1fr; gap: 28px; }
-      .about-text h3 { font-size: 1.5rem; }
-      .about-text p  { font-size: 1rem; }
-
-      .img-frame {
-        aspect-ratio: 3 / 2;
-        font-size: 1.1rem;
-        padding: 20px;
-      }
-
-      .stats-row { gap: 10px; }
-
-      .stat-item { padding: 14px 8px; }
-      .stat-item .num { font-size: 1.5rem; }
-      .stat-item .label { font-size: 0.75rem; }
-
-      /* Courses */
-      .courses-grid      { grid-template-columns: 1fr; gap: 16px; }
-      .course-card       { padding: 26px 20px; }
-      .course-icon       { font-size: 2rem; }
-      .course-card h3    { font-size: 1.3rem; }
-      .course-card p     { font-size: 0.93rem; }
-
-      /* Testimonials */
-      .testimonials-grid { grid-template-columns: 1fr; gap: 16px; }
-      .testi-card        { padding: 22px 18px; }
-      .testi-card .quote { font-size: 2.4rem; }
-      .testi-card p      { font-size: 0.95rem; }
-
-      /* Contact */
-      .contact-wrapper { grid-template-columns: 1fr; gap: 28px; }
-      .contact-info h3 { font-size: 1.3rem; }
-      .contact-form    { padding: 22px 16px; }
-      .form-row        { grid-template-columns: 1fr; gap: 0; }
-
-      /* Footer */
-      footer { padding: 32px 5%; }
-      .footer-logo  { font-size: 1.4rem; }
-      .footer-links { gap: 14px; }
-    }
-
-    /* ══════════════════════════════════════
-       RESPONSIVE — SMALL PHONE (max 480px)
-    ══════════════════════════════════════ */
-    @media (max-width: 480px) {
-
-      nav {
-        padding: 0 4%;
-        height: 58px;
-      }
-
-      .nav-logo .logo-icon { width: 32px; height: 32px; font-size: 1rem; }
-      .nav-logo .logo-text { font-size: 0.92rem; }
-
-      .nav-links { top: 58px; }
-
-      .slider {
-        margin-top: 58px;
-        height: 310px;
-      }
-
-      .slide-content .arabic { font-size: 1.3rem; }
-      .slide-content h1 { font-size: 1.4rem; }
-      .slide-content p  { font-size: 0.85rem; }
-
-      .slide-content .slide-btn {
-        padding: 9px 20px;
-        font-size: 0.85rem;
-      }
-
-      /* Hide arrows on very small screens */
-      .slider-arrow { display: none; }
-
-      section { padding: 44px 4%; }
-
-      .section-header h2 { font-size: 1.5rem; }
-      .section-header .arabic-title { font-size: 1.3rem; }
-
-      /* Stats — 2×2 grid on tiny phones */
-      .stats-row {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 8px;
-      }
-
-      .stat-item { min-width: unset; flex: unset; }
-
-      /* Info items */
-      .info-icon { width: 34px; height: 34px; font-size: 0.88rem; }
-      .info-text { font-size: 0.9rem; }
-
-      /* Footer */
-      .footer-links {
-        flex-direction: column;
-        align-items: center;
-        gap: 10px;
-      }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rawdatul Huffaz – Online Madrasah</title>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+
+/* === VARIABLES === */
+:root {
+  --wine: #6B1A2A;
+  --wine-dark: #4A0F1C;
+  --wine-light: #8C2E42;
+  --cream: #F7EFD8;
+  --cream-dark: #EAD9B4;
+  --cream-mid: #F2E5C5;
+  --gold: #C09040;
+  --gold-light: #E0BA70;
+  --text: #2A0A10;
+}
+
+/* === RESET === */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  background: var(--cream);
+  color: var(--text);
+  overflow-x: hidden;
+  -webkit-text-size-adjust: 100%;
+}
+
+/* === NAVBAR === */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 9000;
+  background: rgba(74,15,28,0.98);
+  border-bottom: 2px solid var(--gold);
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+}
+.nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+}
+.nav-brand .circle {
+  width: 34px; height: 34px;
+  border: 2px solid var(--gold);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Amiri', serif;
+  color: var(--gold);
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+.nav-brand span {
+  font-family: 'Amiri', serif;
+  color: var(--cream);
+  font-size: 0.95rem;
+}
+.burger {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.burger b {
+  display: block;
+  width: 22px; height: 2px;
+  background: var(--cream);
+  border-radius: 2px;
+  transition: all 0.3s;
+  font-style: normal;
+}
+.burger.open b:nth-child(1) { transform: rotate(45deg) translate(4px,4px); }
+.burger.open b:nth-child(2) { opacity: 0; }
+.burger.open b:nth-child(3) { transform: rotate(-45deg) translate(4px,-4px); }
+
+/* Desktop nav links */
+.nav-links {
+  display: none;
+  gap: 24px;
+  list-style: none;
+}
+.nav-links a {
+  color: var(--cream-dark);
+  text-decoration: none;
+  font-size: 0.95rem;
+}
+.nav-links a:hover { color: var(--gold-light); }
+
+/* Mobile dropdown */
+.nav-drop {
+  display: none;
+  position: fixed;
+  top: 56px; left: 0; right: 0;
+  background: rgba(74,15,28,0.99);
+  z-index: 8999;
+  border-bottom: 2px solid var(--gold);
+}
+.nav-drop.show { display: block; }
+.nav-drop a {
+  display: block;
+  padding: 14px 20px;
+  color: var(--cream);
+  text-decoration: none;
+  font-size: 1.05rem;
+  border-bottom: 1px solid rgba(192,144,64,0.15);
+}
+
+/* === SLIDER === */
+.slider {
+  margin-top: 56px;
+  position: relative;
+  width: 100%;
+  height: 300px;
+  overflow: hidden;
+  background: var(--wine-dark);
+}
+.slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.9s;
+}
+.slide.on { opacity: 1; }
+.slide-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+}
+.slide-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(74,15,28,0.80);
+}
+.slide-body {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  color: var(--cream);
+  padding: 0 20px;
+  width: 100%;
+}
+.slide-ar {
+  font-family: 'Amiri', serif;
+  font-size: 1.3rem;
+  color: var(--gold-light);
+  display: block;
+  margin-bottom: 6px;
+}
+.slide-body h1 {
+  font-family: 'Amiri', serif;
+  font-size: 1.35rem;
+  line-height: 1.3;
+  margin-bottom: 8px;
+}
+.slide-body p {
+  font-size: 0.85rem;
+  font-style: italic;
+  color: var(--cream-dark);
+  margin-bottom: 14px;
+  line-height: 1.5;
+}
+.slide-cta {
+  display: inline-block;
+  padding: 9px 22px;
+  background: var(--gold);
+  color: var(--wine-dark);
+  font-family: 'Amiri', serif;
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-decoration: none;
+  border-radius: 2px;
+}
+
+/* Dots */
+.dots {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  z-index: 10;
+}
+.dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.3);
+  border: 1px solid var(--gold);
+  cursor: pointer;
+}
+.dot.on { background: var(--gold); }
+
+/* Arrows – hidden mobile, shown desktop */
+.arr {
+  display: none;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  background: rgba(74,15,28,0.6);
+  border: 1px solid var(--gold);
+  color: var(--gold);
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  font-size: 1.4rem;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+}
+.arr.prev { left: 14px; }
+.arr.next { right: 14px; }
+
+/* === SECTIONS === */
+section { padding: 40px 16px; }
+
+.sec-head { text-align: center; margin-bottom: 28px; }
+.sec-ar {
+  font-family: 'Amiri', serif;
+  font-size: 1.5rem;
+  color: var(--wine-light);
+  display: block;
+  margin-bottom: 2px;
+}
+.sec-head h2 {
+  font-family: 'Amiri', serif;
+  font-size: 1.7rem;
+  color: var(--wine-dark);
+  line-height: 1.2;
+  margin-bottom: 8px;
+}
+.sec-head p {
+  font-size: 0.93rem;
+  color: #6A3040;
+  font-style: italic;
+  line-height: 1.6;
+}
+.divider {
+  display: flex; align-items: center; gap: 10px;
+  justify-content: center; margin: 8px 0 18px;
+}
+.divider::before, .divider::after {
+  content: ''; flex: 1; max-width: 70px; height: 1px; background: var(--gold);
+}
+.divider span { color: var(--gold); }
+
+/* fade in */
+.fi { opacity: 0; transform: translateY(18px); transition: opacity 0.6s, transform 0.6s; }
+.fi.vis { opacity: 1; transform: none; }
+
+/* === ABOUT === */
+#about { background: linear-gradient(160deg, var(--cream), var(--cream-mid)); }
+
+.about-text h3 {
+  font-family: 'Amiri', serif;
+  font-size: 1.35rem;
+  color: var(--wine);
+  margin-bottom: 10px;
+}
+.about-text p {
+  font-size: 0.93rem;
+  line-height: 1.85;
+  color: #4A2030;
+  margin-bottom: 10px;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin: 18px 0;
+}
+.stat {
+  background: var(--wine-dark);
+  color: var(--cream);
+  text-align: center;
+  padding: 12px 6px;
+  border-bottom: 3px solid var(--gold);
+}
+.stat big {
+  font-family: 'Amiri', serif;
+  font-size: 1.5rem;
+  color: var(--gold-light);
+  display: block;
+}
+.stat small { font-size: 0.75rem; opacity: 0.8; }
+
+.img-box {
+  margin-top: 20px;
+  background: linear-gradient(135deg, var(--wine-dark), var(--wine-light));
+  border: 3px solid var(--gold);
+  padding: 20px 14px;
+  text-align: center;
+  font-family: 'Amiri', serif;
+  color: var(--cream);
+  position: relative;
+}
+.img-box::before {
+  content: '';
+  position: absolute;
+  inset: 8px;
+  border: 1px solid rgba(192,144,64,0.3);
+  pointer-events: none;
+}
+.img-box .bsm { font-size: 2rem; color: var(--gold-light); display: block; margin-bottom: 8px; }
+.img-box .hdth { font-size: 0.78rem; font-family: 'Cormorant Garamond', serif; font-style: italic; opacity: 0.7; margin-top: 8px; display: block; line-height: 1.5; }
+
+/* === COURSES === */
+#courses { background: var(--wine-dark); }
+#courses .sec-head h2, #courses .sec-ar { color: var(--cream); }
+#courses .sec-head p { color: var(--cream-dark); }
+
+.courses {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+.ccard {
+  background: linear-gradient(150deg, rgba(107,26,42,0.9), rgba(74,15,28,0.96));
+  border: 1px solid rgba(192,144,64,0.3);
+  padding: 20px 16px;
+  text-align: center;
+}
+.ccard .ico { font-size: 1.8rem; display: block; margin-bottom: 8px; }
+.ccard h3 { font-family: 'Amiri', serif; font-size: 1.15rem; color: var(--cream); margin-bottom: 6px; }
+.ccard p { font-size: 0.85rem; color: rgba(247,239,216,0.7); font-style: italic; line-height: 1.6; }
+
+/* === TESTIMONIALS === */
+#testimonials { background: var(--cream-mid); }
+
+.testis {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+.tcard {
+  background: white;
+  border-left: 4px solid var(--wine);
+  padding: 18px 14px;
+  box-shadow: 0 2px 10px rgba(107,26,42,0.1);
+}
+.tcard .qt { font-family: 'Amiri', serif; font-size: 2.2rem; color: var(--gold); line-height: 0.6; display: block; margin-bottom: 8px; }
+.tcard p { font-size: 0.9rem; color: #4A2030; font-style: italic; line-height: 1.75; margin-bottom: 10px; }
+.tcard .name { font-weight: 600; color: var(--wine); font-size: 0.85rem; }
+
+/* === CONTACT === */
+#contact { background: linear-gradient(135deg, var(--wine-dark), var(--wine)); }
+#contact .sec-head h2, #contact .sec-ar { color: var(--cream); }
+#contact .sec-head p { color: var(--cream-dark); }
+
+.info-block h3 { font-family: 'Amiri', serif; font-size: 1.2rem; color: var(--gold-light); margin-bottom: 14px; }
+.irow { display: flex; gap: 10px; align-items: flex-start; margin-bottom: 14px; }
+.iico {
+  width: 34px; height: 34px; flex-shrink: 0;
+  background: rgba(192,144,64,0.18);
+  border: 1px solid var(--gold);
+  color: var(--gold-light);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.88rem;
+}
+.itxt { font-size: 0.88rem; color: var(--cream-dark); line-height: 1.55; }
+.itxt strong { display: block; color: var(--cream); margin-bottom: 1px; }
+
+/* Form */
+.cform {
+  margin-top: 24px;
+  background: rgba(247,239,216,0.07);
+  border: 1px solid rgba(192,144,64,0.25);
+  padding: 18px 14px;
+}
+.fg { margin-bottom: 12px; }
+.fg label { display: block; color: var(--gold-light); font-size: 0.82rem; margin-bottom: 5px; }
+.fg input, .fg select, .fg textarea {
+  width: 100%;
+  padding: 11px 12px;
+  background: rgba(247,239,216,0.09);
+  border: 1px solid rgba(192,144,64,0.28);
+  color: var(--cream);
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 16px; /* CRITICAL: 16px prevents iOS zoom */
+  border-radius: 2px;
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+  transition: border-color 0.3s;
+}
+.fg input::placeholder, .fg textarea::placeholder { color: rgba(247,239,216,0.35); font-style: italic; }
+.fg input:focus, .fg select:focus, .fg textarea:focus { border-color: var(--gold); }
+.fg select option { background: var(--wine-dark); }
+.fg textarea { resize: vertical; min-height: 100px; }
+
+.frow { display: flex; flex-direction: column; }
+
+.sbtn {
+  width: 100%;
+  padding: 13px;
+  background: var(--gold);
+  color: var(--wine-dark);
+  font-family: 'Amiri', serif;
+  font-size: 1rem;
+  font-weight: 700;
+  border: none;
+  border-radius: 2px;
+  cursor: pointer;
+  margin-top: 4px;
+  -webkit-tap-highlight-color: transparent;
+}
+.sbtn:active { background: var(--gold-light); }
+
+#fmsg { margin-top: 10px; padding: 10px; font-size: 0.88rem; text-align: center; font-style: italic; display: none; border-radius: 2px; }
+#fmsg.ok  { display: block; background: rgba(40,120,40,0.25); color: #90EE90; border: 1px solid #90EE90; }
+#fmsg.err { display: block; background: rgba(200,40,40,0.2);  color: #FFB0B0; border: 1px solid #FFB0B0; }
+
+/* === FOOTER === */
+footer {
+  background: var(--wine-dark);
+  border-top: 2px solid var(--gold);
+  text-align: center;
+  padding: 28px 16px;
+  color: var(--cream-dark);
+}
+.flogo { font-family: 'Amiri', serif; font-size: 1.2rem; color: var(--gold-light); margin-bottom: 6px; }
+.fverse { font-family: 'Amiri', serif; font-size: 0.95rem; color: var(--gold-light); margin-bottom: 12px; }
+.flinks { display: flex; flex-wrap: wrap; gap: 10px 14px; justify-content: center; margin-bottom: 12px; }
+.flinks a { color: var(--cream-dark); text-decoration: none; font-size: 0.85rem; opacity: 0.75; }
+.fcopy { font-size: 0.78rem; opacity: 0.5; font-style: italic; }
+
+/* ============================================================
+   TABLET — 600px and up
+============================================================ */
+@media (min-width: 600px) {
+  nav { height: 64px; padding: 0 24px; }
+  .nav-drop { top: 64px; }
+  .nav-brand span { font-size: 1.1rem; }
+
+  .slider { margin-top: 64px; height: 380px; }
+  .slide-ar { font-size: 1.7rem; }
+  .slide-body h1 { font-size: 1.8rem; }
+  .slide-body p { font-size: 0.95rem; }
+  .slide-cta { padding: 10px 28px; font-size: 1rem; }
+
+  section { padding: 56px 28px; }
+
+  .sec-head h2 { font-size: 2rem; }
+  .sec-ar { font-size: 1.7rem; }
+
+  .stats { grid-template-columns: repeat(4, 1fr); }
+  .courses { grid-template-columns: 1fr 1fr; gap: 14px; }
+  .testis { grid-template-columns: 1fr 1fr; gap: 14px; }
+  .frow { flex-direction: row; gap: 12px; }
+  .frow .fg { flex: 1; margin-bottom: 0; }
+  .cform { padding: 24px 20px; }
+}
+
+/* ============================================================
+   DESKTOP — 960px and up
+============================================================ */
+@media (min-width: 960px) {
+  nav { height: 70px; padding: 0 5%; }
+  .nav-drop { top: 70px; }
+  .burger { display: none; }
+  .nav-links { display: flex; }
+
+  .slider { margin-top: 70px; height: 560px; }
+  .slide-ar { font-size: 2.2rem; }
+  .slide-body h1 { font-size: 3rem; }
+  .slide-body p { font-size: 1.15rem; }
+  .arr { display: flex; }
+
+  section { padding: 80px 5%; }
+  .sec-head h2 { font-size: 2.4rem; }
+  .sec-ar { font-size: 2rem; }
+
+  .about-wrap {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 56px;
+    align-items: center;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .img-box { margin-top: 0; font-size: 1.2rem; padding: 30px; }
+  .img-box .bsm { font-size: 2.8rem; }
+  .img-box .hdth { font-size: 0.9rem; }
+  .about-text h3 { font-size: 1.7rem; }
+  .about-text p { font-size: 1.05rem; }
+
+  .courses { grid-template-columns: repeat(3, 1fr); gap: 22px; max-width: 1100px; margin: 0 auto; }
+  .ccard { padding: 30px 22px; }
+  .ccard .ico { font-size: 2.2rem; }
+  .ccard h3 { font-size: 1.35rem; }
+  .ccard p { font-size: 0.93rem; }
+
+  .testis { grid-template-columns: repeat(3, 1fr); gap: 22px; max-width: 1100px; margin: 0 auto; }
+  .tcard { padding: 24px; }
+
+  .contact-wrap {
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: 56px;
+    max-width: 1000px;
+    margin: 0 auto;
+    align-items: start;
+  }
+  .cform { margin-top: 0; padding: 32px; }
+  .info-block h3 { font-size: 1.5rem; }
+
+  footer { padding: 40px 5%; }
+  .flogo { font-size: 1.7rem; }
+}
+
+</style>
 </head>
 <body>
 
-<!-- ══════════════════════════════════════
-     NAVBAR
-══════════════════════════════════════ -->
+<!-- NAV -->
 <nav>
-  <div class="nav-logo">
-    <div class="logo-icon">ر</div>
-    <span class="logo-text">Rawdatul Huffaz</span>
-  </div>
-
-  <ul class="nav-links" id="navLinks">
+  <a class="nav-brand" href="#home">
+    <div class="circle">ر</div>
+    <span>Rawdatul Huffaz</span>
+  </a>
+  <ul class="nav-links">
     <li><a href="#home">Home</a></li>
     <li><a href="#about">About</a></li>
     <li><a href="#courses">Courses</a></li>
     <li><a href="#testimonials">Testimonials</a></li>
     <li><a href="#contact">Contact</a></li>
   </ul>
-
-  <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Toggle menu">
-    <span></span>
-    <span></span>
-    <span></span>
+  <button class="burger" id="burger" onclick="toggleNav()" aria-label="Menu">
+    <b></b><b></b><b></b>
   </button>
 </nav>
+<div class="nav-drop" id="navDrop">
+  <a href="#home" onclick="closeNav()">Home</a>
+  <a href="#about" onclick="closeNav()">About</a>
+  <a href="#courses" onclick="closeNav()">Courses</a>
+  <a href="#testimonials" onclick="closeNav()">Testimonials</a>
+  <a href="#contact" onclick="closeNav()">Contact</a>
+</div>
 
-<!-- ══════════════════════════════════════
-     SLIDER / HERO
-══════════════════════════════════════ -->
-<section class="slider" id="home">
-
-  <div class="slide active">
-    <div class="slide-bg" style="background: linear-gradient(135deg, #4A0F1C 0%, #6B1A2A 40%, #2A0A10 100%);"></div>
+<!-- SLIDER -->
+<div class="slider" id="home">
+  <div class="slide on">
+    <div class="slide-bg" style="background:linear-gradient(135deg,#4A0F1C 0%,#6B1A2A 50%,#2A0A10 100%)"></div>
     <div class="slide-overlay"></div>
-    <div class="slide-content">
-      <div class="arabic">روضة الحفاظ</div>
+    <div class="slide-body">
+      <span class="slide-ar">روضة الحفاظ</span>
       <h1>Welcome to Rawdatul Huffaz</h1>
       <p>A sanctuary of sacred knowledge, nurturing the hearts of Qur'an memorizers worldwide.</p>
-      <a href="#courses" class="slide-btn">Explore Our Courses</a>
+      <a href="#courses" class="slide-cta">Explore Courses</a>
     </div>
   </div>
-
   <div class="slide">
-    <div class="slide-bg" style="background: linear-gradient(135deg, #2A0A10 0%, #4A0F1C 50%, #8C2E42 100%);"></div>
+    <div class="slide-bg" style="background:linear-gradient(135deg,#2A0A10 0%,#4A0F1C 50%,#8C2E42 100%)"></div>
     <div class="slide-overlay"></div>
-    <div class="slide-content">
-      <div class="arabic">حفظ القرآن الكريم</div>
+    <div class="slide-body">
+      <span class="slide-ar">حفظ القرآن الكريم</span>
       <h1>Memorise the Holy Qur'an Online</h1>
-      <p>Learn Hifz, Tajweed & Islamic Studies from qualified scholars — wherever you are in the world.</p>
-      <a href="#contact" class="slide-btn">Enrol Now</a>
+      <p>Learn Hifz, Tajweed &amp; Islamic Studies from qualified scholars — worldwide.</p>
+      <a href="#contact" class="slide-cta">Enrol Now</a>
     </div>
   </div>
-
   <div class="slide">
-    <div class="slide-bg" style="background: radial-gradient(ellipse at top, #8C2E42 0%, #4A0F1C 70%);"></div>
+    <div class="slide-bg" style="background:radial-gradient(ellipse at top,#8C2E42 0%,#4A0F1C 70%)"></div>
     <div class="slide-overlay"></div>
-    <div class="slide-content">
-      <div class="arabic">العلم نور</div>
+    <div class="slide-body">
+      <span class="slide-ar">العلم نور</span>
       <h1>Knowledge is Light</h1>
-      <p>Join thousands of students on their journey to connect deeply with the Book of Allah.</p>
-      <a href="#about" class="slide-btn">Learn More</a>
+      <p>Join thousands of students connecting deeply with the Book of Allah.</p>
+      <a href="#about" class="slide-cta">Learn More</a>
     </div>
   </div>
-
   <div class="slide">
-    <div class="slide-bg" style="background: linear-gradient(160deg, #3A1020 0%, #6B1A2A 60%, #4A0F1C 100%);"></div>
+    <div class="slide-bg" style="background:linear-gradient(160deg,#3A1020 0%,#6B1A2A 60%,#4A0F1C 100%)"></div>
     <div class="slide-overlay"></div>
-    <div class="slide-content">
-      <div class="arabic">تعلّم وازدهر</div>
+    <div class="slide-body">
+      <span class="slide-ar">تعلّم وازدهر</span>
       <h1>Learn. Grow. Excel.</h1>
-      <p>Expert teachers guide students of all ages through flexible, personalised online classes.</p>
-      <a href="#contact" class="slide-btn">Register Today</a>
+      <p>Expert teachers guide students of all ages through flexible online classes.</p>
+      <a href="#contact" class="slide-cta">Register Today</a>
     </div>
   </div>
+  <button class="arr prev" onclick="go(cur-1)">&#8249;</button>
+  <button class="arr next" onclick="go(cur+1)">&#8250;</button>
+  <div class="dots" id="dots"></div>
+</div>
 
-  <button class="slider-arrow prev" onclick="changeSlide(-1)" aria-label="Previous slide">&#8249;</button>
-  <button class="slider-arrow next" onclick="changeSlide(1)"  aria-label="Next slide">&#8250;</button>
-  <div class="slider-dots" id="sliderDots"></div>
-</section>
-
-<!-- ══════════════════════════════════════
-     ABOUT
-══════════════════════════════════════ -->
+<!-- ABOUT -->
 <section id="about">
-  <div class="section-header fade-in">
-    <span class="arabic-title">من نحن</span>
+  <div class="sec-head fi">
+    <span class="sec-ar">من نحن</span>
     <h2>About Our Madrasah</h2>
     <div class="divider"><span>✦</span></div>
-    <p>Rawdatul Huffaz is a leading online Islamic institution dedicated to the preservation and teaching of the Holy Qur'an.</p>
+    <p>A leading online Islamic institution dedicated to the preservation and teaching of the Holy Qur'an.</p>
   </div>
-
-  <div class="about-grid">
-    <div class="about-text fade-in">
+  <div class="about-wrap">
+    <div class="about-text fi">
       <h3>Our Mission &amp; Vision</h3>
-      <p>Rawdatul Huffaz — "The Garden of Memorisers" — was established with a singular vision: to make authentic Qur'anic education accessible to every Muslim, regardless of geography or circumstance.</p>
-      <p>Our qualified and experienced teachers bring centuries of scholarly tradition into the modern digital age, offering one-on-one and group classes in a nurturing, structured environment.</p>
-      <p>We are committed to producing graduates who not only memorise the Qur'an but embody its values and spread its light in their communities.</p>
-
-      <div class="stats-row">
-        <div class="stat-item">
-          <span class="num">500+</span>
-          <span class="label">Students</span>
-        </div>
-        <div class="stat-item">
-          <span class="num">30+</span>
-          <span class="label">Teachers</span>
-        </div>
-        <div class="stat-item">
-          <span class="num">15+</span>
-          <span class="label">Countries</span>
-        </div>
-        <div class="stat-item">
-          <span class="num">10+</span>
-          <span class="label">Years</span>
-        </div>
+      <p>Rawdatul Huffaz — "The Garden of Memorisers" — was established to make authentic Qur'anic education accessible to every Muslim, regardless of geography or circumstance.</p>
+      <p>Our qualified teachers bring centuries of scholarly tradition into the modern digital age, offering one-on-one and group classes in a nurturing environment.</p>
+      <p>We produce graduates who not only memorise the Qur'an but embody its values in their communities.</p>
+      <div class="stats">
+        <div class="stat"><big>500+</big><small>Students</small></div>
+        <div class="stat"><big>30+</big><small>Teachers</small></div>
+        <div class="stat"><big>15+</big><small>Countries</small></div>
+        <div class="stat"><big>10+</big><small>Years</small></div>
       </div>
     </div>
-
-    <div class="about-img fade-in">
-      <div class="img-frame">
-        <div>
-          <div style="font-size: 3rem; color: var(--gold-light); margin-bottom: 14px;">﷽</div>
-          روضة الحفاظ<br>
-          <span style="font-size: 1rem; opacity: 0.8;">The Garden of Memorisers</span><br><br>
-          <span style="font-size: 0.92rem; font-family: 'Cormorant Garamond', serif; font-style: italic; opacity: 0.7;">
-            "The best of you are those who learn the Qur'an and teach it."<br>— Prophet Muhammad ﷺ
-          </span>
-        </div>
+    <div class="fi">
+      <div class="img-box">
+        <span class="bsm">﷽</span>
+        روضة الحفاظ<br>
+        <span style="font-size:0.82rem;opacity:0.8">The Garden of Memorisers</span>
+        <span class="hdth">"The best of you are those who learn the Qur'an and teach it."<br>— Prophet Muhammad ﷺ</span>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ══════════════════════════════════════
-     COURSES
-══════════════════════════════════════ -->
+<!-- COURSES -->
 <section id="courses">
-  <div class="section-header fade-in">
-    <span class="arabic-title">دروسنا</span>
+  <div class="sec-head fi">
+    <span class="sec-ar">دروسنا</span>
     <h2>Our Programmes</h2>
     <div class="divider"><span>✦</span></div>
-    <p>Choose from a range of carefully designed Islamic education programmes for all ages and levels.</p>
+    <p>Carefully designed Islamic education programmes for all ages and levels.</p>
   </div>
-
-  <div class="courses-grid">
-    <div class="course-card fade-in">
-      <span class="course-icon">📖</span>
-      <h3>Hifzul Qur'an</h3>
-      <p>Complete memorisation of the Holy Qur'an under certified Huffaz teachers with emphasis on accuracy and retention.</p>
-    </div>
-    <div class="course-card fade-in">
-      <span class="course-icon">🎙️</span>
-      <h3>Tajweed &amp; Recitation</h3>
-      <p>Master the rules of Tajweed and beautify your recitation with proper makhaarij and sifaat.</p>
-    </div>
-    <div class="course-card fade-in">
-      <span class="course-icon">📚</span>
-      <h3>Islamic Studies</h3>
-      <p>Comprehensive curriculum covering Fiqh, Aqeedah, Seerah and Islamic History for children and adults.</p>
-    </div>
-    <div class="course-card fade-in">
-      <span class="course-icon">ا</span>
-      <h3>Arabic Language</h3>
-      <p>Learn Qur'anic and Modern Standard Arabic from beginner to advanced level with expert instructors.</p>
-    </div>
-    <div class="course-card fade-in">
-      <span class="course-icon">🌙</span>
-      <h3>Children's Maktab</h3>
-      <p>Fun and engaging Islamic lessons for young learners covering Duas, basic Aqeedah and Qur'an reading.</p>
-    </div>
-    <div class="course-card fade-in">
-      <span class="course-icon">👩‍🎓</span>
-      <h3>Sisters' Programme</h3>
-      <p>A dedicated environment for women, taught exclusively by qualified female scholars in a supportive setting.</p>
-    </div>
+  <div class="courses">
+    <div class="ccard fi"><span class="ico">📖</span><h3>Hifzul Qur'an</h3><p>Complete memorisation under certified Huffaz teachers with emphasis on accuracy and retention.</p></div>
+    <div class="ccard fi"><span class="ico">🎙️</span><h3>Tajweed &amp; Recitation</h3><p>Master the rules of Tajweed and beautify your recitation with proper makhaarij and sifaat.</p></div>
+    <div class="ccard fi"><span class="ico">📚</span><h3>Islamic Studies</h3><p>Comprehensive curriculum covering Fiqh, Aqeedah, Seerah and Islamic History.</p></div>
+    <div class="ccard fi"><span class="ico">ا</span><h3>Arabic Language</h3><p>Learn Qur'anic and Modern Standard Arabic from beginner to advanced level.</p></div>
+    <div class="ccard fi"><span class="ico">🌙</span><h3>Children's Maktab</h3><p>Fun Islamic lessons for young learners covering Duas, Aqeedah and Qur'an reading.</p></div>
+    <div class="ccard fi"><span class="ico">👩‍🎓</span><h3>Sisters' Programme</h3><p>A dedicated environment for women, taught exclusively by qualified female scholars.</p></div>
   </div>
 </section>
 
-<!-- ══════════════════════════════════════
-     TESTIMONIALS
-══════════════════════════════════════ -->
+<!-- TESTIMONIALS -->
 <section id="testimonials">
-  <div class="section-header fade-in">
-    <span class="arabic-title">شهادات</span>
+  <div class="sec-head fi">
+    <span class="sec-ar">شهادات</span>
     <h2>What Our Students Say</h2>
     <div class="divider"><span>✦</span></div>
     <p>Hear from our students and parents about their experience at Rawdatul Huffaz.</p>
   </div>
-
-  <div class="testimonials-grid">
-    <div class="testi-card fade-in">
-      <span class="quote">"</span>
+  <div class="testis">
+    <div class="tcard fi">
+      <span class="qt">"</span>
       <p>Alhamdulillah, my son completed his Hifz in just three years. The teachers are incredibly patient and knowledgeable. Rawdatul Huffaz changed our family's life.</p>
-      <span class="testi-name">— Fatimah Al-Hassan, Parent</span>
+      <span class="name">— Fatimah Al-Hassan, Parent</span>
     </div>
-    <div class="testi-card fade-in">
-      <span class="quote">"</span>
+    <div class="tcard fi">
+      <span class="qt">"</span>
       <p>I joined from the UK and couldn't find a local madrasah that suited me. This online programme gave me exactly what I needed — flexible timings and excellent instruction.</p>
-      <span class="testi-name">— Brother Yusuf, Student (UK)</span>
+      <span class="name">— Brother Yusuf, Student (UK)</span>
     </div>
-    <div class="testi-card fade-in">
-      <span class="quote">"</span>
-      <p>The Tajweed course is outstanding. I've tried many platforms but none come close to the personalised feedback and care I receive from my teacher here.</p>
-      <span class="testi-name">— Sister Maryam, Student (Canada)</span>
+    <div class="tcard fi">
+      <span class="qt">"</span>
+      <p>The Tajweed course is outstanding. None of the other platforms come close to the personalised feedback and care I receive from my teacher here.</p>
+      <span class="name">— Sister Maryam, Student (Canada)</span>
     </div>
   </div>
 </section>
 
-<!-- ══════════════════════════════════════
-     CONTACT
-══════════════════════════════════════ -->
+<!-- CONTACT -->
 <section id="contact">
-  <div class="section-header fade-in">
-    <span class="arabic-title">تواصل معنا</span>
+  <div class="sec-head fi">
+    <span class="sec-ar">تواصل معنا</span>
     <h2>Get in Touch / Enrol Now</h2>
     <div class="divider"><span>✦</span></div>
-    <p>Fill in the form below and your message will be sent directly to the Madrasah email.</p>
+    <p>Fill in the form and your message will be sent directly to the Madrasah.</p>
   </div>
-
-  <div class="contact-wrapper">
-
-    <!-- Contact Info -->
-    <div class="contact-info fade-in">
+  <div class="contact-wrap">
+    <div class="info-block fi">
       <h3>Contact Information</h3>
-
-      <div class="info-item">
-        <div class="info-icon">✉</div>
-        <div class="info-text">
-          <strong>Email</strong>
-          rawdatulhuffaz@gmail.com
-        </div>
+      <div class="irow">
+        <div class="iico">✉</div>
+        <div class="itxt"><strong>Email</strong>rawdatulhuffaz@gmail.com</div>
       </div>
-
-      <div class="info-item">
-        <div class="info-icon">📞</div>
-        <div class="info-text">
-          <strong>Phone / WhatsApp</strong>
-          +234 800 000 0000
-        </div>
+      <div class="irow">
+        <div class="iico">📞</div>
+        <div class="itxt"><strong>Phone / WhatsApp</strong>+234 800 000 0000</div>
       </div>
-
-      <div class="info-item">
-        <div class="info-icon">🕐</div>
-        <div class="info-text">
-          <strong>Class Hours</strong>
-          Saturday – Thursday<br>6:00 AM – 9:00 PM (WAT)
-        </div>
+      <div class="irow">
+        <div class="iico">🕐</div>
+        <div class="itxt"><strong>Class Hours</strong>Saturday – Thursday<br>6:00 AM – 9:00 PM (WAT)</div>
       </div>
-
-      <div class="info-item">
-        <div class="info-icon">🌐</div>
-        <div class="info-text">
-          <strong>Platform</strong>
-          Zoom / Google Meet<br>All devices supported
-        </div>
+      <div class="irow">
+        <div class="iico">🌐</div>
+        <div class="itxt"><strong>Platform</strong>Zoom / Google Meet<br>All devices supported</div>
       </div>
     </div>
-
-    <!-- Enrolment Form -->
-    <div class="contact-form fade-in">
-      <!--
-        HOW THIS FORM WORKS:
-        On Submit, JavaScript opens the device's default email app
-        (Gmail, Outlook, Apple Mail) pre-filled with all the student's
-        details, addressed to the Madrasah email.
-        The user just clicks SEND inside their email app.
-
-        To change the destination email, update madrasahEmail below.
-      -->
-      <form id="contactForm" novalidate>
-
-        <div class="form-row">
-          <div class="form-group">
-            <label for="fname">Full Name *</label>
-            <input type="text" id="fname" name="fname" placeholder="Your full name" required />
-          </div>
-          <div class="form-group">
-            <label for="fage">Age</label>
-            <input type="number" id="fage" name="fage" placeholder="Your age" min="3" max="99" />
-          </div>
+    <div class="cform fi">
+      <form id="cform" novalidate>
+        <div class="frow">
+          <div class="fg"><label>Full Name *</label><input type="text" id="fn" placeholder="Your full name" required></div>
+          <div class="fg"><label>Age</label><input type="number" id="fa" placeholder="Your age" min="3" max="99"></div>
         </div>
-
-        <div class="form-row">
-          <div class="form-group">
-            <label for="femail">Email Address *</label>
-            <input type="email" id="femail" name="femail" placeholder="your@email.com" required />
-          </div>
-          <div class="form-group">
-            <label for="fphone">Phone / WhatsApp</label>
-            <input type="tel" id="fphone" name="fphone" placeholder="+234 ..." />
-          </div>
+        <div class="frow">
+          <div class="fg"><label>Email *</label><input type="email" id="fe" placeholder="your@email.com" required></div>
+          <div class="fg"><label>Phone / WhatsApp</label><input type="tel" id="fp" placeholder="+234 ..."></div>
         </div>
-
-        <div class="form-group">
-          <label for="fprogramme">Programme of Interest *</label>
-          <select id="fprogramme" name="fprogramme" required>
+        <div class="fg">
+          <label>Programme *</label>
+          <select id="fc" required>
             <option value="" disabled selected>— Select a programme —</option>
             <option>Hifzul Qur'an</option>
             <option>Tajweed &amp; Recitation</option>
@@ -2315,178 +1786,113 @@ SLIDER
             <option>Other</option>
           </select>
         </div>
-
-        <div class="form-group">
-          <label for="fcountry">Country</label>
-          <input type="text" id="fcountry" name="fcountry" placeholder="Your country" />
-        </div>
-
-        <div class="form-group">
-          <label for="fmessage">Message / Questions</label>
-          <textarea id="fmessage" name="fmessage" placeholder="Tell us about yourself or ask any questions..."></textarea>
-        </div>
-
-        <button type="submit" class="btn-submit">✉ Send Message to Madrasah</button>
-        <div id="form-msg" role="alert"></div>
-
+        <div class="fg"><label>Country</label><input type="text" id="fco" placeholder="Your country"></div>
+        <div class="fg"><label>Message</label><textarea id="fm" placeholder="Tell us about yourself or ask questions..."></textarea></div>
+        <button type="submit" class="sbtn">✉ Send Message to Madrasah</button>
+        <div id="fmsg"></div>
       </form>
     </div>
   </div>
 </section>
 
-<!-- ══════════════════════════════════════
-     FOOTER
-══════════════════════════════════════ -->
+<!-- FOOTER -->
 <footer>
-  <div class="footer-logo">روضة الحفاظ — Rawdatul Huffaz</div>
-  <p class="footer-verse">"وَمَن يَتَّقِ اللَّهَ يَجْعَل لَّهُ مَخْرَجًا"</p>
-  <nav class="footer-links" aria-label="Footer navigation">
+  <div class="flogo">روضة الحفاظ — Rawdatul Huffaz</div>
+  <p class="fverse">"وَمَن يَتَّقِ اللَّهَ يَجْعَل لَّهُ مَخْرَجًا"</p>
+  <div class="flinks">
     <a href="#home">Home</a>
     <a href="#about">About</a>
     <a href="#courses">Courses</a>
     <a href="#testimonials">Testimonials</a>
     <a href="#contact">Contact</a>
-  </nav>
-  <p class="footer-copy">© 2025 Rawdatul Huffaz Online Madrasah. All rights reserved.</p>
+  </div>
+  <p class="fcopy">© 2025 Rawdatul Huffaz Online Madrasah. All rights reserved.</p>
 </footer>
 
-<!-- ══════════════════════════════════════
-     JAVASCRIPT
-══════════════════════════════════════ -->
 <script>
-  'use strict';
+// NAV
+function toggleNav(){
+  document.getElementById('navDrop').classList.toggle('show');
+  document.getElementById('burger').classList.toggle('open');
+}
+function closeNav(){
+  document.getElementById('navDrop').classList.remove('show');
+  document.getElementById('burger').classList.remove('open');
+}
+document.addEventListener('click',function(e){
+  var d=document.getElementById('navDrop');
+  var b=document.getElementById('burger');
+  if(d.classList.contains('show')&&!d.contains(e.target)&&!b.contains(e.target)) closeNav();
+});
 
-  /* ── MOBILE NAV ─────────────────────────── */
-  var hamburger = document.getElementById('hamburger');
-  var navLinks  = document.getElementById('navLinks');
+// SLIDER
+var slides=document.querySelectorAll('.slide');
+var dotsEl=document.getElementById('dots');
+var cur=0, tmr;
+slides.forEach(function(_,i){
+  var d=document.createElement('div');
+  d.className='dot'+(i===0?' on':'');
+  d.onclick=function(){go(i);};
+  dotsEl.appendChild(d);
+});
+function go(n){
+  var ds=document.querySelectorAll('.dot');
+  slides[cur].classList.remove('on');
+  ds[cur].classList.remove('on');
+  cur=(n+slides.length)%slides.length;
+  slides[cur].classList.add('on');
+  ds[cur].classList.add('on');
+  clearInterval(tmr);
+  tmr=setInterval(function(){go(cur+1);},5000);
+}
+tmr=setInterval(function(){go(cur+1);},5000);
 
-  function toggleMenu() {
-    var isOpen = navLinks.classList.toggle('open');
-    hamburger.classList.toggle('open', isOpen);
-    hamburger.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-  }
+// Touch swipe
+var tx=0;
+document.querySelector('.slider').addEventListener('touchstart',function(e){tx=e.touches[0].clientX;},{passive:true});
+document.querySelector('.slider').addEventListener('touchend',function(e){
+  var dx=tx-e.changedTouches[0].clientX;
+  if(Math.abs(dx)>40) go(cur+(dx>0?1:-1));
+},{passive:true});
 
-  // Close menu when a link is tapped
-  navLinks.querySelectorAll('a').forEach(function(link) {
-    link.addEventListener('click', function() {
-      navLinks.classList.remove('open');
-      hamburger.classList.remove('open');
-    });
+// FADE IN
+var obs=new IntersectionObserver(function(entries){
+  entries.forEach(function(en){
+    if(en.isIntersecting){en.target.classList.add('vis');obs.unobserve(en.target);}
   });
+},{threshold:0.1});
+document.querySelectorAll('.fi').forEach(function(el){obs.observe(el);});
 
-  // Close menu when tapping outside
-  document.addEventListener('click', function(e) {
-    if (navLinks.classList.contains('open') &&
-        !navLinks.contains(e.target) &&
-        !hamburger.contains(e.target)) {
-      navLinks.classList.remove('open');
-      hamburger.classList.remove('open');
-    }
-  });
-
-  /* ── SLIDER ─────────────────────────────── */
-  var slides        = document.querySelectorAll('.slide');
-  var dotsContainer = document.getElementById('sliderDots');
-  var current       = 0;
-  var autoTimer;
-
-  // Build dots
-  slides.forEach(function(_, i) {
-    var dot = document.createElement('div');
-    dot.className = 'dot' + (i === 0 ? ' active' : '');
-    dot.addEventListener('click', function() { goTo(i); });
-    dotsContainer.appendChild(dot);
-  });
-
-  function goTo(n) {
-    var dots = document.querySelectorAll('.dot');
-    slides[current].classList.remove('active');
-    dots[current].classList.remove('active');
-    current = (n + slides.length) % slides.length;
-    slides[current].classList.add('active');
-    dots[current].classList.add('active');
-    clearInterval(autoTimer);
-    autoTimer = setInterval(function() { goTo(current + 1); }, 5000);
-  }
-
-  function changeSlide(dir) { goTo(current + dir); }
-
-  autoTimer = setInterval(function() { goTo(current + 1); }, 5000);
-
-  /* ── SCROLL FADE IN ─────────────────────── */
-  var fadeObserver = new IntersectionObserver(function(entries) {
-    entries.forEach(function(entry) {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-        fadeObserver.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.12 });
-
-  document.querySelectorAll('.fade-in').forEach(function(el) {
-    fadeObserver.observe(el);
-  });
-
-  /* ── CONTACT FORM → MAILTO ──────────────── */
-  document.getElementById('contactForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-
-    var name      = document.getElementById('fname').value.trim();
-    var age       = document.getElementById('fage').value.trim();
-    var email     = document.getElementById('femail').value.trim();
-    var phone     = document.getElementById('fphone').value.trim();
-    var programme = document.getElementById('fprogramme').value;
-    var country   = document.getElementById('fcountry').value.trim();
-    var message   = document.getElementById('fmessage').value.trim();
-
-    if (!name || !email || !programme) {
-      showMsg('Please fill in all required fields (*).', 'error');
-      return;
-    }
-
-    // ✏️ Change this to the actual Madrasah email address:
-    var madrasahEmail = 'rawdatulhuffaz@gmail.com';
-
-    var subject = encodeURIComponent(
-      'Rawdatul Huffaz Enquiry – ' + programme + ' – ' + name
-    );
-
-    var body = encodeURIComponent(
-      'Assalamu Alaikum,\n\n' +
-      'A new enquiry / enrolment request has been received from the website:\n\n' +
-      '━━━━━━━━━━━━━━━━━━━━━\n' +
-      'STUDENT / ENQUIRER DETAILS\n' +
-      '━━━━━━━━━━━━━━━━━━━━━\n' +
-      'Full Name   : ' + name + '\n' +
-      'Age         : ' + (age || 'Not provided') + '\n' +
-      'Email       : ' + email + '\n' +
-      'Phone       : ' + (phone || 'Not provided') + '\n' +
-      'Country     : ' + (country || 'Not provided') + '\n' +
-      'Programme   : ' + programme + '\n\n' +
-      'MESSAGE / QUESTIONS:\n' +
-      (message || 'No message provided.') + '\n\n' +
-      '━━━━━━━━━━━━━━━━━━━━━\n' +
-      'Sent from the Rawdatul Huffaz website contact form.'
-    );
-
-    window.location.href = 'mailto:' + madrasahEmail +
-      '?subject=' + subject + '&body=' + body;
-
-    showMsg(
-      'Your email client is opening — please click Send to complete your submission. JazakAllahu Khayran! 🌙',
-      'success'
-    );
-
-    this.reset();
-  });
-
-  function showMsg(text, type) {
-    var msg = document.getElementById('form-msg');
-    msg.textContent = text;
-    msg.className   = type;
-    setTimeout(function() { msg.className = ''; msg.textContent = ''; }, 9000);
-  }
+// FORM
+document.getElementById('cform').addEventListener('submit',function(e){
+  e.preventDefault();
+  var name=document.getElementById('fn').value.trim();
+  var age=document.getElementById('fa').value.trim();
+  var email=document.getElementById('fe').value.trim();
+  var phone=document.getElementById('fp').value.trim();
+  var prog=document.getElementById('fc').value;
+  var country=document.getElementById('fco').value.trim();
+  var msg=document.getElementById('fm').value.trim();
+  if(!name||!email||!prog){showMsg('Please fill in all required fields (*).','err');return;}
+  // ✏️ Change to actual madrasah email:
+  var to='rawdatulhuffaz@gmail.com';
+  var sub=encodeURIComponent('Rawdatul Huffaz Enquiry – '+prog+' – '+name);
+  var body=encodeURIComponent(
+    'Assalamu Alaikum,\n\nNew enquiry from website:\n\n'+
+    'Name: '+name+'\nAge: '+(age||'N/A')+'\nEmail: '+email+
+    '\nPhone: '+(phone||'N/A')+'\nCountry: '+(country||'N/A')+
+    '\nProgramme: '+prog+'\n\nMessage:\n'+(msg||'None')+
+    '\n\n— Rawdatul Huffaz Website'
+  );
+  window.location.href='mailto:'+to+'?subject='+sub+'&body='+body;
+  showMsg('Your email app is opening — click Send to submit. JazakAllahu Khayran! 🌙','ok');
+  this.reset();
+});
+function showMsg(t,c){
+  var el=document.getElementById('fmsg');
+  el.textContent=t; el.className=c;
+  setTimeout(function(){el.className='';el.textContent='';},9000);
+}
 </script>
-
 </body>
 </html>
